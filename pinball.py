@@ -13,4 +13,20 @@ tk.resizable(0,0) #The width flag controls whether the window can be resized hor
 tk.wm_attributes("-topmost", 1) #this window is always placed on top of other windows
 canvas = tkinter.Canvas(tk, width=500, height=400, bd=0, highlightthickness=0, bg="powderblue") #create a canvas, bd=borderwidth
 canvas.pack() #organizes widgets in blocks before placing them in the parent widget
-tk.mainloop() #call mainloop when the application is ready to run
+
+#create pinball object
+class Ball():
+    def __init__(self,x,y,canvas,color):
+        self.canvas = canvas
+        self.id=canvas.create_oval(10,10,25,25,fill=color)
+        self.canvas.move(self.id,x,y)
+    def draw(self):
+        self.canvas.move(self.id,0,-1)
+
+ball = Ball(250,200,canvas, '#ff546e')
+
+while True:
+    ball.draw()
+    tk.update_idletasks()
+    tk.update()
+    time.sleep(0.01)
