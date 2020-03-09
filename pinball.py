@@ -19,11 +19,14 @@ class Ball():
     def __init__(self,x,y,canvas,color):
         self.canvas = canvas
         self.id=canvas.create_oval(10,10,25,25,fill=color)
-        self.canvas.move(self.id,x,y)
+        self.canvas.move(self.id,x,y) #put the ball on canvas
+
+        # Random selected X and Y direction to move
         starts = [-3,-2,-1,1,2,3]
         random.shuffle(starts)
         self.xSpeed=starts[0]
         self.ySpeed=starts[1]
+
         self.canvas_height = self.canvas.winfo_height()
         self.canvas_weight = self.canvas.winfo_width()
 
@@ -39,9 +42,20 @@ class Ball():
         if(pos[2]>=self.canvas_weight):
             self.xSpeed = -1
 
-ball = Ball(250,200,canvas, '#ff546e')
+class Board:
+    def __init__(self,canvas, color):
+        self.canvas = canvas
+        self.id=canvas.create_rectangle(0,0,150,10,fill=color)
+        self.canvas.move(self.id,200,350)
+
+    def draw(self):
+        pass
+
+ball = Ball(250,200,canvas,'#ff546e')
+board = Board(canvas,'#C19A6B')
 
 while True:
     ball.draw()
+    board.draw()
     tk.update()
     time.sleep(0.01)
