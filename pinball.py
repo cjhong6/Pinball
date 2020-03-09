@@ -28,71 +28,77 @@ class Ball:
         self.xDirection=starts[0]
         self.yDirection=starts[1]
 
-        self.height = self.canvas.winfo_height()
-        self.width = self.canvas.winfo_width()
+        self.height=self.canvas.winfo_height()
+        self.width=self.canvas.winfo_width()
+
+        self.hit_bottom=False
 
     def draw(self):
         self.canvas.move(self.id,self.xDirection,self.yDirection)
-        pos = self.canvas.coords(self.id)
+        pos=self.canvas.coords(self.id)
 
         # ball reflect after hit the board
         if self.hit_board(pos) == True:
             self.yDirection = -5
 
         if(pos[1]<=0):
-            self.yDirection = 5
+            self.yDirection=5
         if(pos[3]>=self.height):
-            self.yDirection = -5
+            self.yDirection=-5
         if(pos[0]<=0):
-            self.xDirection = 5
+            self.xDirection=5
         if(pos[2]>=self.width):
-            self.xDirection = -5
+            self.xDirection=-5
+
+        if pos[3] >= self.height:
+            self.hit_bottom=True
 
     def hit_board(self,pos):
         board_pos = self.canvas.coords(self.board.id)
         if pos[2]>=board_pos[0] and pos[0]<=board_pos[2]:
-            if pos[3] <= board_pos[3] and pos[3] >= board_pos[1]:
+            if pos[3]<=board_pos[3] and pos[3]>=board_pos[1]:
                 return True
         return False
 
 class Board:
     def __init__(self,canvas, color):
-        self.canvas = canvas
+        self.canvas=canvas
         self.id=canvas.create_rectangle(0,0,150,10,fill=color)
         self.canvas.move(self.id,200,350)
         self.xDirection=0
-        self.width = self.canvas.winfo_width()
+        self.width=self.canvas.winfo_width()
         # bind the event listening based on the keyborad key
         self.canvas.bind_all('<KeyPress-Left>', self.move_left)
         self.canvas.bind_all('<KeyPress-Right>', self.move_right)
 
     def draw(self):
         self.canvas.move(self.id,self.xDirection,0)
-        pos = self.canvas.coords(self.id)
+        pos=self.canvas.coords(self.id)
         if pos[0]<=0:
-            self.xDirection = 0
+            self.xDirection=0
         if pos[2]>=self.width:
-            self.xDirection = 0
+            self.xDirection=0
 
     def move_left(self,evt):
-        pos = self.canvas.coords(self.id)
+        pos=self.canvas.coords(self.id)
         if pos[0]<=0:
-            self.xDirection = 0
+            self.xDirection=0
         else:
-            self.xDirection = -5
+            self.xDirection=-5
     def move_right(self,evt):
-        pos = self.canvas.coords(self.id)
+        pos=self.canvas.coords(self.id)
         if pos[2]>=self.width:
-            self.xDirection = 0
+            self.xDirection=0
         else:
-            self.xDirection = 5
+            self.xDirection=5
 
 
-board = Board(canvas,'#C19A6B')
-ball = Ball(250,200,canvas,board,'#ff546e')
+board=Board(canvas,'#C19A6B')
+ball=Ball(250,200,canvas,board,'#ff546e')
 
 while True:
-    ball.draw()
-    board.draw()
+    if ball.hit_bottom == False:    
+        ball.draw()
+        board.draw()
     tk.update()
     time.sleep(0.01)
