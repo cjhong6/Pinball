@@ -97,8 +97,10 @@ board=Board(canvas,'#C19A6B')
 ball=Ball(250,200,canvas,board,'#ff546e')
 
 while True:
-    if ball.hit_bottom == False:    
+    if ball.hit_bottom == False:
         ball.draw()
         board.draw()
+    else:
+        tk.destroy()
     tk.update()
     time.sleep(0.01)
