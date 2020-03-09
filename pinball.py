@@ -15,14 +15,15 @@ canvas.pack() #put the canvas(widget) to the tk window
 tk.update() #Update the window size
 
 #create pinball object
-class Ball():
-    def __init__(self,x,y,canvas,color):
+class Ball:
+    def __init__(self,x,y,canvas,board,color):
         self.canvas = canvas
         self.id=canvas.create_oval(10,10,25,25,fill=color)
         self.canvas.move(self.id,x,y) #put the ball on canvas
+        self.board = board
 
         # Random selected X and Y direction to move
-        starts = [-3,-2,-1,1,2,3]
+        starts = [-4,-5,-6,4,5,6]
         random.shuffle(starts)
         self.xDirection=starts[0]
         self.yDirection=starts[1]
@@ -33,14 +34,26 @@ class Ball():
     def draw(self):
         self.canvas.move(self.id,self.xDirection,self.yDirection)
         pos = self.canvas.coords(self.id)
+
+        # ball reflect after hit the board
+        if self.hit_board(pos) == True:
+            self.yDirection = -5
+
         if(pos[1]<=0):
-            self.yDirection = 1
+            self.yDirection = 5
         if(pos[3]>=self.height):
-            self.yDirection = -1
+            self.yDirection = -5
         if(pos[0]<=0):
-            self.xDirection = 1
+            self.xDirection = 5
         if(pos[2]>=self.width):
-            self.xDirection = -1
+            self.xDirection = -5
+
+    def hit_board(self,pos):
+        board_pos = self.canvas.coords(self.board.id)
+        if pos[2]>=board_pos[0] and pos[0]<=board_pos[2]:
+            if pos[3] <= board_pos[3] and pos[3] >= board_pos[1]:
+                return True
+        return False
 
 class Board:
     def __init__(self,canvas, color):
@@ -66,16 +79,17 @@ class Board:
         if pos[0]<=0:
             self.xDirection = 0
         else:
-            self.xDirection = -2
+            self.xDirection = -5
     def move_right(self,evt):
         pos = self.canvas.coords(self.id)
         if pos[2]>=self.width:
             self.xDirection = 0
         else:
-            self.xDirection = 2
+            self.xDirection = 5
 
-ball = Ball(250,200,canvas,'#ff546e')
+
 board = Board(canvas,'#C19A6B')
+ball = Ball(250,200,canvas,board,'#ff546e')
 
 while True:
     ball.draw()
