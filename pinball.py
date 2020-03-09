@@ -20,9 +20,12 @@ class Ball():
         self.canvas = canvas
         self.id=canvas.create_oval(10,10,25,25,fill=color)
         self.canvas.move(self.id,x,y)
-        self.xSpeed = 0
-        self.ySpeed = 1
+        starts = [-3,-2,-1,1,2,3]
+        random.shuffle(starts)
+        self.xSpeed=starts[0]
+        self.ySpeed=starts[1]
         self.canvas_height = self.canvas.winfo_height()
+        self.canvas_weight = self.canvas.winfo_width()
 
     def draw(self):
         self.canvas.move(self.id,self.xSpeed,self.ySpeed)
@@ -31,6 +34,10 @@ class Ball():
             self.ySpeed = 1
         if(pos[3]>=self.canvas_height):
             self.ySpeed = -1
+        if(pos[0]<=0):
+            self.xSpeed = 1
+        if(pos[2]>=self.canvas_weight):
+            self.xSpeed = -1
 
 ball = Ball(250,200,canvas, '#ff546e')
 
