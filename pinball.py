@@ -26,14 +26,15 @@ class Ball:
         starts = [-4,-5,-6,4,5,6]
         random.shuffle(starts)
         self.xDirection=starts[0]
-        self.yDirection=starts[1]
+        self.yDirection=-3
 
         self.height=self.canvas.winfo_height()
         self.width=self.canvas.winfo_width()
 
         self.hit_bottom=False
-
+        time.sleep(3)
     def draw(self):
+
         self.canvas.move(self.id,self.xDirection,self.yDirection)
         pos=self.canvas.coords(self.id)
 
